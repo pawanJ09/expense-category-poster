@@ -2,9 +2,9 @@
 [![AWS Lambda Package and Deploy](https://github.com/pawanJ09/expense-category-poster/actions/workflows/aws-lambda-package-deploy.yml/badge.svg)](https://github.com/pawanJ09/expense-category-poster/actions/workflows/aws-lambda-package-deploy.yml)
 [![AWS Lambda Test](https://github.com/pawanJ09/expense-category-poster/actions/workflows/aws-lambda-test.yml/badge.svg)](https://github.com/pawanJ09/expense-category-poster/actions/workflows/aws-lambda-test.yml)
 
-# Expense Category Patcher
+# Expense Category Poster
 
-This app will patch(update) the provided expense category in DynamoDB.
+This app will post(create) the provided expense category in DynamoDB.
 
 ## Requirements
 
