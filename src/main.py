@@ -18,37 +18,39 @@ def lambda_handler(event, context):
         print(f'Incoming API Gateway Body: {body}')
         req = json.loads(body)
         if req['category']:
-            table_item = table.get_item(Key={'category': req['category']})
-            if not table_item['Item']:
+            try:
+                table_item = table.get_item(Key={'category': req['category']})
+                if table_item['Item']:
+                    msg = {"message": f"{req['category']} category already exists."}
+                    print(f'Exception caught: {msg}')
+                    return {
+                        "statusCode": 400,
+                        "headers": {"content-type": "application/json"},
+                        "body": json.dumps(msg)
+                    }
+            except KeyError as ke:
                 print(f'{req["category"]} not found in table. Now adding.')
-                vals = list()
-                try:
-                    vals.extend(req['val'])
-                except KeyError as ke:
-                    # If existing request has no vals then handle gracefully and still add the
-                    # category
-                    print(f'Request has no val')
-                # Converting to set and back to list to remove duplicates
-                vals_list = list(set(vals))
-                response = table.put_item(Item={
-                    'category': req['category'],
-                    'val': vals_list
-                })
-                print('Returning successful response')
-                msg = {"message": f"{req['category']} category successfully added."}
-                return {
-                    "statusCode": 201,
-                    "headers": {"content-type": "application/json"},
-                    "body": json.dumps(msg)
-                }
-            else:
-                msg = {"message": f"{req['category']} category already exists."}
-                print(f'Exception caught: {msg}')
-                return {
-                    "statusCode": 400,
-                    "headers": {"content-type": "application/json"},
-                    "body": json.dumps(msg)
-                }
+            vals = list()
+            try:
+                vals.extend(req['val'])
+            except KeyError as ke:
+                # If existing request has no vals then handle gracefully and still add the
+                # category
+                print(f'Request has no val')
+            # Converting to set and back to list to remove duplicates
+            vals_list = list(set(vals))
+            response = table.put_item(Item={
+                'category': req['category'],
+                'val': vals_list
+            })
+            print('Returning successful response')
+            msg = {"message": f"{req['category']} category successfully added."}
+            return {
+                "statusCode": 201,
+                "headers": {"content-type": "application/json"},
+                "body": json.dumps(msg)
+            }
+
     except (AttributeError, KeyError) as er:
         msg = {"message": "Category not defined in the request."}
         print(f'Exception caught: {msg}')
