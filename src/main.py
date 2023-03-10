@@ -35,14 +35,14 @@ def lambda_handler(event, context):
                     'val': vals_list
                 })
                 print('Returning successful response')
-                msg = '{"message": "{0} category successfully added."}'.format(req["category"])
+                msg = {"message": f"{req['category']} category successfully added."}
                 return {
                     "statusCode": 201,
                     "headers": {"content-type": "application/json"},
                     "body": json.dumps(msg)
                 }
             else:
-                msg = '{"message": "{0} category already exists."}'.format(req["category"])
+                msg = {"message": f"{req['category']} category already exists."}
                 print(f'Exception caught: {msg}')
                 return {
                     "statusCode": 400,
@@ -50,7 +50,7 @@ def lambda_handler(event, context):
                     "body": json.dumps(msg)
                 }
     except (AttributeError, KeyError) as er:
-        msg = '{"message": "Category not defined in the request."}'
+        msg = {"message": "Category not defined in the request."}
         print(f'Exception caught: {msg}')
         return {
             "statusCode": 400,
